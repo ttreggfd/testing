@@ -1,24 +1,42 @@
-FROM golang:1.11-alpine AS build
+FROM ubuntu:20.04
+MAINTAINER Jimmy Lo <jimmy@pchome.tw>
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Install tools required for project
-# Run `docker build --no-cache .` to update dependencies
-RUN apk add --no-cache git
-RUN go get github.com/golang/dep/cmd/dep
+RUN apt -y update
 
-# List project dependencies with Gopkg.toml and Gopkg.lock
-# These layers are only re-built when Gopkg files are updated
-COPY Gopkg.lock Gopkg.toml /go/src/project/
-WORKDIR /go/src/project/
-# Install library dependencies
-RUN dep ensure -vendor-only
+# build-essential
+RUN apt install -y build-essential
 
-# Copy the entire project and build it
-# This layer is rebuilt when a file changes in the project directory
-COPY . /go/src/project/
-RUN go build -o /bin/project
+# apt-utils
+RUN apt-get -y install apt-utils
 
-# This results in a single layer image
-FROM scratch
-COPY --from=build /bin/project /bin/project
-ENTRYPOINT ["/bin/project"]
-CMD ["--help"]
+# sudo
+RUN apt-get -y install sudo
+
+# curl
+RUN apt-get -y install curl
+
+# vim
+RUN apt-get -y install vim
+
+# net-tools
+RUN apt-get -y install net-tools
+
+# zip
+RUN apt-get -y install zip
+
+# unzip
+RUN apt-get -y install unzip
+
+# openssh-server
+RUN apt-get -y install openssh-server
+
+# supervisor
+RUN apt-get -y install supervisor
+ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# git
+RUN apt-get -y install git
+
+# cron
+RUN apt-get -y install cron
