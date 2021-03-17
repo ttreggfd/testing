@@ -1,8 +1,3 @@
-FROM nginx
-RUN apt-get update && apt-get install -y \
-git \
-php-fpm \
-curl \
-zip
-
-EXPOSE 80
+FROM busybox
+ARG git_branch
+RUN echo “Building $git_branch”
