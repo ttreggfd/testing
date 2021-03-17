@@ -1,3 +1,9 @@
-FROM busybox
-ARG git_branch
-RUN echo “Building $git_branch”
+FROM nginx
+RUN apt-get update && apt-get install -y \
+git \
+php-fpm \
+curl
+curl \
+zip
+
+EXPOSE 80
